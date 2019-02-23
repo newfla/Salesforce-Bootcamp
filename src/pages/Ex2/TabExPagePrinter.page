@@ -1,0 +1,21 @@
+<!--/****************** BOOTCAMP SALESFORCES F.B. ******************/-->
+
+
+<apex:page renderAs="pdf" Controller="bookingPrinter" standardStylesheets="false">
+    <apex:form>
+        <apex:pageBlock id = "pageBlock_Booking">
+            <apex:pageBlockTable value = "{!bookings}" var = "booking">
+                <apex:column value="{!booking.Name}"/>
+                <apex:column value="{!booking.Created_Date__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+
+       <apex:pageBlock id = "pageBlock_Invoice">
+            <apex:pageBlockTable value = "{!invoices}" var = "invoice">
+                <apex:column value="{!invoice.Issue_Date__c}"/>
+	    		<apex:column value="{!invoice.Total_Amount__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+
+</apex:page>

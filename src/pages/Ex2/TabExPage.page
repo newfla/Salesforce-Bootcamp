@@ -1,0 +1,41 @@
+<!--/****************** BOOTCAMP SALESFORCES F.B. ******************/-->
+
+<apex:page docType = "html-5.0" controller = " TabExController">
+    <apex:pageMessages/>
+    <apex:form id = "form_Search_Booking">
+        <apex:pageBlock id = "pageBlock_Search" title = "Booking Search">
+            <apex:pageBlockSection columns = "1">
+                <apex:selectList id = "input_Type" label = "Service Type" required = "true" value = "{!type}" multiselect = "false">
+                    <apex:selectOptions value = "{!items}"/>
+                </apex:selectList>
+                <apex:input id = "input_DateFrom" label = "From" type = "date" value = "{!dateFrom}"/>
+                <apex:input id = "input_DateTo" label = "To" type = "date" value = "{!dateTo}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons>
+                    <apex:commandButton id = "button_search" value = "Search" action = "{!search}" reRender="pageBlock_Table" />
+                </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+
+    <apex:form>
+        <apex:pageBlock id= "pageBlock_Table">
+            <apex:pageBlockTable value = "{!bookings}" var = "booking" rendered="{!IF(showTable,true,false)}">
+                <apex:column value="{!booking.Name}"/>
+	    		<apex:column value="{!booking.Account__r.Name}"/>
+	    		<apex:column value="{!booking.Created_Date__c}"/>
+	    		<apex:column value="{!booking.Status__c}"/>
+                <apex:column headerValue = "Actions" rowspan="2">
+                    <apex:commandButton id = "button_cancel" value = "Cancel" action = "{!cancel}" rendered="{!IF(booking.Status__c == 'New', true, false)}" reRender = "pageBlock_Table">
+                        <apex:param  value = "{!booking.Name}" assignTo = "{!cancelBooking}" />
+                    </apex:commandButton>
+                    <apex:commandButton id = "button_generate" value = "Generate Invoice" action = "{!generate}" rendered="{!IF(booking.Status__c == 'New', true, false)}" reRender = "pageBlock_Table">
+                        <apex:param value = "{!booking.Name}" assignTo = "{!generateInvoiceBooking}" />
+                    </apex:commandButton>
+                    <apex:commandButton id = "button_pdf" value = "Generate PDF" action = "{!generatePDF}" rendered="{!IF(booking.Status__c == 'Invoiced', true, false)}" reRender = "pageBlock_Table">
+                        <apex:param value = "{!booking.Id}" assignTo = "{!generatePDFBooking}" />
+                    </apex:commandButton>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

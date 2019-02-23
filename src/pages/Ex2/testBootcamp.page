@@ -1,0 +1,25 @@
+<!--/****************** BOOTCAMP SALESFORCES F.B. ******************/-->
+
+
+<apex:page standardController="Account">
+    <apex:form>
+    <div>
+        <apex:pageBlock>
+            <apex:pageBlockSection title="Prova">
+                    <apex:inputText id="input1" value="{!Account.name}"></apex:inputText>
+                    <apex:outputText value="{!Account.name}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+
+        <apex:pageBlock title="Tabella">
+            <apex:pageBlockTable value="{!Account.contacts}" var="contact">
+                <apex:column value="{!contact.name}" />
+                <apex:column value="{!contact.email}"/>
+
+
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+    </div> 
+   </apex:form>
+</apex:page>
