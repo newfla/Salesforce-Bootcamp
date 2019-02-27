@@ -10,7 +10,8 @@ public with sharing class TriggerHandlerServiceEx5 {
 
        for(Booking_Item__c bookItem: items){
            for(Id idService: services.keySet()){
-               if(idService == bookItem.Service__c){
+               if(bookItem.Service__c != null && idService == bookItem.Service__c){
+                   //QUI AMOUNT DEVE ESSERE X FORZA DIVERSO DA NULL
                    bookItem.Booking__r.Amount__c += (services.get(idService).Price__c - servicesOld.get(idService).Price__c) ;
                    bookings.add(bookItem.Booking__r);
                    break;
@@ -32,7 +33,7 @@ public with sharing class TriggerHandlerServiceEx5 {
 
         for(Booking_Item__c bookItem: items){
            for(Id idService: services.keySet()){
-               if(idService == bookItem.Service__c){
+               if(bookItem.Service__c != null && idService == bookItem.Service__c){
                    bookItem.Booking__r.Amount__c -= services.get(idService).Price__c;
                    bookings.add(bookItem.Booking__r);
                    break;
