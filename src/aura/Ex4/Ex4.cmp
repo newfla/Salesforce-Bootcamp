@@ -33,6 +33,7 @@
                       <th>Creation Date</th> 
                       <th>Account Name</th>
                       <th>Status</th>
+                      <th>Actions</th>
                     </tr>
                     <tr>
                       <td>{!booking.Name}</td>
