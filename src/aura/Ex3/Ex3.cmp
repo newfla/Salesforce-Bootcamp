@@ -1,0 +1,24 @@
+<aura:component controller="Ex3ControllerApex" implements="force:appHostable,force:lightningQuickAction, flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-->aura:registerEvent name="customEvent" type="c:TestEvent"/-->
+
+    <aura:attribute name="contact" type="Contact"/>
+    <aura:attribute name="initialsContact" type="String" default="SF"/>
+    <aura:attribute name="nClick" type="Integer" default="1"/>
+
+    <ul class="slds-has-dividers_bottom-space">
+        <li class="slds-item">
+            <lightning:tile  label="{!v.contact.Name}" href="https://github.com/newfla">
+                <aura:set attribute="media">
+                    <lightning:avatar initials="{!v.initialsContact}" fallbackIconName="standard:person_account"/>
+                </aura:set>
+                <ul class="slds-list_horizontal slds-has-dividers_right">
+                    <li class="slds-item">Phone: {!v.contact.Phone}</li>
+                </ul>
+            </lightning:tile>
+        </li>
+    </ul>
+
+    <lightning:button variant="brand" label="{!v.nClick}" title="" onclick="{!c.handleClick}" />
+
+</aura:component>

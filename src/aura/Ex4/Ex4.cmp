@@ -1,0 +1,52 @@
+<aura:component controller="Ex4ControllerApex" implements="force:appHostable,force:lightningQuickAction, flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="dateFrom" type="Date" default=""/>
+    <aura:attribute name="dateTo" type="Date" default=""/>
+    <aura:attribute name="serviceType" type="String" default=""/>
+    <aura:attribute name="accountName" type="String" default=""/>
+    <aura:attribute name="bookings" type="Booking__c[]"/>
+
+
+    <div class="row">
+        <h2 class="header">Date Section (Entrambe o nulla)</h2>
+        <lightning:input type="date" name="data1" label="Enter date From" value = "{!v.dateFrom}"/>
+        <lightning:input type="date" name="data2" label="Enter date To" value = "{!v.dateTo}" />
+    </div>
+    <br/><br/>
+    <div class="row">
+        <h2 class="header">Type and Name Section (Type obbligatorio)</h2>
+        
+        <ui:inputSelect label="Service Type:" class="dynamic" aura:id="typeSelector" value="{!v.serviceType}"/>
+    
+        <lightning:input name="account" label="Enter account name" value = "{!v.accountName}"/>
+    </div>
+
+    <div class="row">
+        <br/>
+        <lightning:button variant="brand" label="Search" title="Search" onclick="{!c.handleClick }" />
+    </div>
+
+    <aura:iteration items="{!v.bookings}" var="booking">
+            <table style="width:100%">
+                    <tr>
+                      <th>Name</th>
+                      <th>Creation Date</th> 
+                      <th>Account Name</th>
+                      <th>Status</th>
+                    </tr>
+                    <tr>
+                      <td>{!booking.Name}</td>
+                      <td>{!booking.Created_Date__c}</td> 
+                      <td>{!booking.Account__r.Name}</td>
+                      <td>{!booking.Status__c}</td>
+                      <td><aura:if isTrue="{!booking.Status__c=='New'}">
+
+                            <lightning:button variant="destructive" label="Cancel" title="Cancel" onclick="{!c.handleCancel}"  value ="{!booking.Name}" />
+                            <lightning:button variant="success" label="Generate Invoice" title="Generate Invoice" onclick="{!c.handleGenerate}" value ="{!booking.Name}"/>
+                     </aura:if>
+                    <br/></td>
+                    </tr>
+                </table>
+    </aura:iteration>
+
+</aura:component>

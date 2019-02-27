@@ -1,0 +1,15 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+   
+        <aura:handler name="testHandler" event="c:TestEvent" action="{!c.handleMessage}" />
+       
+        <aura:attribute name="messageFromChild" type="String" />
+       
+        <lightning:card>
+            <div>
+               
+                Message from Child : {!v.messageFromChild}
+           
+            </div>
+        </lightning:card>
+       
+</aura:component>

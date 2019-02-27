@@ -24,7 +24,6 @@ public with sharing class TabExController {
         showTable = false;
     }
 
-
     public List<SelectOption> getItems() {
 
         List<SelectOption> options = new List<SelectOption>();
@@ -58,6 +57,7 @@ public with sharing class TabExController {
     public PageReference cancel(){
         if (!bookingsUtils.updateNewStatus(cancelBooking))
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Issue updating Status__c'));
+        search();
         return null;
     }
 
@@ -72,5 +72,4 @@ public with sharing class TabExController {
         printer.getParameters().put('Booking',generatePDFBooking);
         return printer;
     }
-
 }

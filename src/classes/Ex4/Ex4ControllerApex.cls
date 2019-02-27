@@ -1,38 +1,61 @@
-/****************** BOOTCAMP SALESFORCES F.B. ******************/
+public without sharing class Ex4ControllerApex {
 
-public with sharing class BookingUtils {
+    @AuraEnabled
+    public static List<String> getPicklistStatus(){
 
-    public List<Booking__c> search( String type, Date dateFrom, Date dateTo ){
+        List<String> options = new List<String>();
+
+        Schema.DescribeFieldResult fieldResult = Service__c.Type__c.getDescribe();
+
+        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+        for( Schema.PicklistEntry f : ple)
+               options.add(f.getLabel());
+        return options;
+    }
+
+    @AuraEnabled
+    public static List<Booking__c> getBookings(String serviceType, Date dateFrom, Date dateTo, String accountName){
 
         List<Booking__c> bookings=new List<Booking__c>();
 
-        if(!String.isEmpty(type) && dateFrom == null && dateTo == null)
+        if(!String.isEmpty(serviceType) && dateFrom == null && dateTo == null && String.isEmpty(accountName))
             try {
-                bookings=[ SELECT Id 
+                bookings=[ SELECT Id , Name, Created_Date__c, Status__c, Account__r.Name
                     FROM Booking__c 
                     WHERE Id IN (SELECT Booking__c 
                                 FROM Booking_Item__c
-                                WHERE Service__r.Type__c =: type)];
-            
+                                WHERE Service__r.Type__c =: serviceType)];
             } catch (Exception e) {bookings = null;}
         
-        else if(!String.isEmpty(type) && dateFrom != null && dateTo != null){
+        else if(!String.isEmpty(serviceType) && dateFrom != null && dateTo != null && !String.isEmpty(serviceType)){
             try{
-                bookings=[ SELECT Id 
+                bookings=[ SELECT Id , Name, Created_Date__c, Status__c, Account__r.Name
                     FROM Booking__c  
                     WHERE Id IN (SELECT Booking__c 
                                  FROM Booking_Item__c 
-                                 WHERE Service__r.Type__c=:type)
+                                 WHERE Service__r.Type__c=:serviceType)
                         AND Created_Date__c >= :dateFrom
-                        AND Created_Date__c <= :dateTo];
+                        AND Created_Date__c <= :dateTo
+                        AND Account__r.Name  = : accountName];
+            } catch (Exception e){ bookings = null; }
+        }
+
+        else if(!String.isEmpty(serviceType) && dateFrom == null && dateTo == null && !String.isEmpty(serviceType)){
+            try{
+                bookings=[ SELECT Id , Name, Created_Date__c, Status__c, Account__r.Name
+                    FROM Booking__c  
+                    WHERE Id IN (SELECT Booking__c 
+                                 FROM Booking_Item__c 
+                                 WHERE Service__r.Type__c=:serviceType)
+                        AND Account__r.Name  = : accountName];
             } catch (Exception e){ bookings = null; }
         }
 
         return bookings;
     }
 
-
-    public Boolean updateNewStatus(String bookingNumber){
+    @AuraEnabled
+    public static Boolean updateNewStatus(String bookingName){
 
         Booking__c booking;
 
@@ -40,24 +63,24 @@ public with sharing class BookingUtils {
         try{
             booking = [SELECT Id, Name, Status__c 
                         FROM Booking__c 
-                        WHERE Name =: bookingNumber AND Status__c = 'New']
+                        WHERE Name =: bookingName AND Status__c = 'New']
                     .get(0);
         }catch(Exception e){ return false; }
-        
         //CHECK & UPDATE STATUS ON DB
         if(booking == null && !booking.Status__c.equals('New'))
             return false;
         else{
-
             booking.Status__c = 'Canceled';
             try{
                 update booking;
             }catch(Exception e){ return false; }
         }
+
         return true;
     }
 
-    public Boolean generateInvoice(String bookingNumber){
+    @AuraEnabled
+    public static Boolean generateInvoice(String bookingName){
 
         Booking__c booking;
         Invoice__c invoice= new Invoice__c();
@@ -67,7 +90,7 @@ public with sharing class BookingUtils {
         try{
             booking = [SELECT Id, Name, Status__c 
                         FROM Booking__c 
-                        WHERE Name =: bookingNumber]
+                        WHERE Name =: bookingName]
                     .get(0);
         }catch(Exception e){ return false; }
 
