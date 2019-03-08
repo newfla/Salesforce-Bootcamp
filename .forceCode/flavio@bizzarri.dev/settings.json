@@ -1,4 +1,5 @@
 {
+    "alias": "",
     "apiVersion": "45.0",
     "deployOptions": {
         "allowMissingFiles": true,
@@ -12,7 +13,6 @@
     },
     "overwritePackageXML": false,
     "poll": 1500,
-    "pollTimeout": 1200,
     "prefix": "",
     "showTestCoverage": true,
     "spaDist": "",
